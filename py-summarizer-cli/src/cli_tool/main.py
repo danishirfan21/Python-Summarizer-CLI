@@ -1,11 +1,19 @@
 from __future__ import annotations
 import argparse
 import os
+import sys
+from pathlib import Path
 from typing import Dict, Any, List
 
-from .io_utils import read_text, ensure_dir, stem_name, write_json, write_csv
-from .summarizer import summarize_and_insights
-from .openai_client import OptionalOpenAIClient
+# Add src to path so imports work when running as script
+if __name__ == "__main__":
+    src_path = Path(__file__).resolve().parent.parent
+    if str(src_path) not in sys.path:
+        sys.path.insert(0, str(src_path))
+
+from cli_tool.io_utils import read_text, ensure_dir, stem_name, write_json, write_csv
+from cli_tool.summarizer import summarize_and_insights
+from cli_tool.openai_client import OptionalOpenAIClient
 
 def run_cli(args: argparse.Namespace) -> Dict[str, Any]:
     text = read_text(args.input)

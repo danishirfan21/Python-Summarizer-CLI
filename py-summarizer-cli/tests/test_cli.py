@@ -14,10 +14,18 @@ class TestCLI(unittest.TestCase):
                 p.unlink()
             outdir.rmdir()
 
-        cmd = [sys.executable, str(proj_root / "src" / "cli_tool" / "main.py"),
+        # Add src to Python path and run as module
+        env = os.environ.copy()
+        src_path = str(proj_root / "src")
+        if "PYTHONPATH" in env:
+            env["PYTHONPATH"] = f"{src_path}{os.pathsep}{env['PYTHONPATH']}"
+        else:
+            env["PYTHONPATH"] = src_path
+        
+        cmd = [sys.executable, "-m", "cli_tool.main",
                "--input", str(sample), "--outdir", str(outdir)]
-        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False, env=env, cwd=proj_root)
+        self.assertEqual(result.returncode, 0, msg=f"stdout: {result.stdout}\nstderr: {result.stderr}")
         self.assertTrue((outdir / "sample_summary.json").exists())
         self.assertTrue((outdir / "sample_insights.csv").exists())
 
