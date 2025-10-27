@@ -1,2 +1,8 @@
-# No required packages. To use OpenAI, install:
+# Core dependencies (none - uses only standard library)
+
+# Optional dependencies:
+# For OpenAI integration:
 # openai>=1.0.0
+
+# For development and testing:
+pytest>=7.0.0
