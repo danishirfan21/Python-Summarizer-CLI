@@ -1,0 +1,2 @@
+# No required packages. To use OpenAI, install:
+# openai>=1.0.0
